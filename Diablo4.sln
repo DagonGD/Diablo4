@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diablo4", "Diablo4\Diablo4\Diablo4.csproj", "{E938BCD0-F113-4CAE-BF68-D16EA8CA7069}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "Diablo4Content", "Diablo4\Diablo4Content\Diablo4Content.contentproj", "{986424BD-FEAE-4D92-9E9D-363C3F6E8F98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{A858867A-C6D0-41AE-93C8-E9D6B2C7ABC0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E938BCD0-F113-4CAE-BF68-D16EA8CA7069}.Debug|x86.ActiveCfg = Debug|x86
+		{E938BCD0-F113-4CAE-BF68-D16EA8CA7069}.Debug|x86.Build.0 = Debug|x86
+		{E938BCD0-F113-4CAE-BF68-D16EA8CA7069}.Release|x86.ActiveCfg = Release|x86
+		{E938BCD0-F113-4CAE-BF68-D16EA8CA7069}.Release|x86.Build.0 = Release|x86
+		{986424BD-FEAE-4D92-9E9D-363C3F6E8F98}.Debug|x86.ActiveCfg = Debug|x86
+		{986424BD-FEAE-4D92-9E9D-363C3F6E8F98}.Release|x86.ActiveCfg = Release|x86
+		{A858867A-C6D0-41AE-93C8-E9D6B2C7ABC0}.Debug|x86.ActiveCfg = Debug|x86
+		{A858867A-C6D0-41AE-93C8-E9D6B2C7ABC0}.Debug|x86.Build.0 = Debug|x86
+		{A858867A-C6D0-41AE-93C8-E9D6B2C7ABC0}.Release|x86.ActiveCfg = Release|x86
+		{A858867A-C6D0-41AE-93C8-E9D6B2C7ABC0}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
