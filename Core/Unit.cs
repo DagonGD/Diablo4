@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Core
 {
-    class Unit
+    public class Unit
     {
     }
 }
