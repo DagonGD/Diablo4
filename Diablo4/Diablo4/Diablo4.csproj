@@ -116,6 +116,10 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.csproj">
+      <Project>{A858867A-C6D0-41AE-93C8-E9D6B2C7ABC0}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Diablo4Content\Diablo4Content.contentproj">
       <Name>Diablo4Content</Name>
       <XnaReferenceType>Content</XnaReferenceType>
@@ -148,6 +152,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

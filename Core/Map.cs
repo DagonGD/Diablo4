@@ -9,8 +9,31 @@ namespace Core
 {
     public class Map
     {
-        public int Height;
         public int Width;
+        public int Height;
+
+        public int[][] Land;
+
+        public Map()
+        {
+            
+        }
+
+        public Map(int w, int h)
+        {
+            Width = w;
+            Height = h;
+            Land = new int[w][];
+
+            for(int i=0;i<w;i++)
+            {
+                Land[i]=new int[h];
+                for(int j=0;j<h;j++)
+                {
+                    Land[i][j] = 0;
+                }
+            }
+        }
 
         public static Map Load(string filename)
         {

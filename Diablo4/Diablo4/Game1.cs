@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -23,6 +24,7 @@ namespace Diablo4
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Map map1 = Map.Load("Worlds/World1/Map1.map");
         }
 
         /// <summary>
