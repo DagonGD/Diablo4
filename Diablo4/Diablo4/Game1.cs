@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Diablo4.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -19,13 +20,13 @@ namespace Diablo4
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Map map;
-
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
+
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
         }
@@ -38,7 +39,8 @@ namespace Diablo4
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Components.Add(new FPSCounter(this));
+            Components.Add(new GameMap(this));
 
             base.Initialize();
         }
@@ -53,8 +55,7 @@ namespace Diablo4
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            map = Map.Load("Worlds/World1/Map1.map");
-            map.Init(this);
+            
             //map.ScrollX = 320;
         }
 
@@ -74,19 +75,11 @@ namespace Diablo4
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
+            KeyboardState keyboardState = Keyboard.GetState();
+            MouseState mouseState = Mouse.GetState();
 
-            if (state.IsKeyDown(Keys.Escape))
+            if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-
-            if (state.IsKeyDown(Keys.Up))
-                map.ScrollY += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
-            if (state.IsKeyDown(Keys.Down))
-                map.ScrollY -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
-            if (state.IsKeyDown(Keys.Left))
-                map.ScrollX += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
-            if (state.IsKeyDown(Keys.Right))
-                map.ScrollX -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
 
             base.Update(gameTime);
         }
@@ -98,8 +91,6 @@ namespace Diablo4
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            map.Draw();
 
             base.Draw(gameTime);
         }
