@@ -19,12 +19,15 @@ namespace Diablo4
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Map map;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
+            IsMouseVisible = true;
             Content.RootDirectory = "Content";
-            Map map1 = Map.Load("Worlds/World1/Map1.map");
         }
 
         /// <summary>
@@ -50,6 +53,9 @@ namespace Diablo4
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            map = Map.Load("Worlds/World1/Map1.map");
+            map.Init(this);
+            //map.ScrollX = 320;
         }
 
         /// <summary>
@@ -68,11 +74,19 @@ namespace Diablo4
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            KeyboardState state = Keyboard.GetState();
 
-            // TODO: Add your update logic here
+            if (state.IsKeyDown(Keys.Escape))
+                Exit();
+
+            if (state.IsKeyDown(Keys.Up))
+                map.ScrollY += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
+            if (state.IsKeyDown(Keys.Down))
+                map.ScrollY -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
+            if (state.IsKeyDown(Keys.Left))
+                map.ScrollX += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
+            if (state.IsKeyDown(Keys.Right))
+                map.ScrollX -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
 
             base.Update(gameTime);
         }
@@ -85,7 +99,7 @@ namespace Diablo4
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            map.Draw();
 
             base.Draw(gameTime);
         }
