@@ -104,11 +104,7 @@ namespace Core
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    coords.X = Tile.Width*(j+i)/2;
-                    coords.Y = Tile.Height*(j-i)/2;
-
-                    coords += Scroll;
-
+                    coords = Map2Screen(new Vector2(i, j));
                     if((coords.X+Tile.Width>0) && (coords.Y+Tile.Height>0) &&
                         (coords.X < _game.GraphicsDevice.Viewport.Width) && (coords.Y < _game.GraphicsDevice.Viewport.Height))
                         SpriteBatch.Draw(Tiles[Land[i][j]].Image, coords, Color.White);
@@ -137,30 +133,72 @@ namespace Core
         /// <returns></returns>
         public int GetLandAtPos(Vector2 pos)
         {
+            Vector2 screen = Screen2Map(pos);
+            int i = (int)screen.X;
+            int j = (int)screen.Y;
+
+            //Если координата попала на карту, возвращаем тип тайла
+            if (i >= 0 && i < Width && j >= 0 && j < Height)
+                return Land[i][j];
+            
+            //Координата за пределами карты
+            return -1;
+        }
+
+        /// <summary>
+        /// Преобразование экранных координат в координаты карты
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        /// <remarks>Накручено, зато работает правильно))</remarks>
+        public Vector2 Screen2Map(Vector2 pos)
+        {
+            //http://www.gamedev.ru/code/forum/?id=122565#m7
+            //http://www.math.by/geometry/eqline.html
             pos -= Scroll;
 
-            pos -= new Vector2(Tile.Width/2, Tile.Height/2);
-            
-            //int i = (int) (pos.X/Tile.Width) + (int) (pos.Y/Tile.Height);
-            //int j = (int) (pos.X/Tile.Width) - (int) (pos.Y/Tile.Height);
+            //Определение координат красного робма
+            int x = (int)Math.Floor(pos.X / Tile.Width);
+            int y = (int)Math.Floor(pos.Y / Tile.Height);
+            int i = y + x;
+            int j = x - y;
 
-            for (int i = 0; i < Width; i++)
-            {
-                for (int j = 0; j < Height; j++)
-                {
-                    Vector2 coords=new Vector2(Tile.Width*(j + i)/2, Tile.Height*(j - i)/2);
-                    if (pos.X > coords.X && pos.X < coords.X + Tile.Width && pos.Y > coords.Y && pos.Y < coords.Y + Tile.Height)
-                    {
+            //Определение координаты в красном ромбе
+            int a = ((int)Math.Floor(pos.X) % ((int)Math.Floor(Tile.Width)));
+            int b = ((int)Math.Floor(pos.Y) % ((int)Math.Floor(Tile.Height)));
 
-                        if (i < 0 || i >= Width || j < 0 || j >= Height)
-                            return -1;
+            if (a < 0)
+                a = (int)Tile.Width + a;
+            if (b < 0)
+                b = (int)Tile.Height + b;
 
-                        return Land[i][j];
-                    }
-                }
-            }
+            //Определение части красного ромба, куда попали координаты
+            if (Tile.Height * a / 2 + Tile.Width * b / 2 - Tile.Height * Tile.Width / 4 < 0)
+                i--;
 
-            return -1;
+            if (-Tile.Height * a / 2 + Tile.Width * b / 2 + Tile.Height * Tile.Width / 4 < 0)
+                j++;
+
+            if (Tile.Height * a / 2 + Tile.Width * b / 2 - 6144 > 0)
+                i++;
+
+            if (-Tile.Height * a / 2 + Tile.Width * b / 2 - Tile.Height * Tile.Width / 4 > 0)
+                j--;
+            return new Vector2(i,j);
+        }
+
+        /// <summary>
+        /// Преобразование координат карты в экранные
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public Vector2 Map2Screen(Vector2 pos)
+        {
+            Vector2 coords;
+            coords.X = Tile.Width * ((int)pos.X + (int)pos.Y) / 2;
+            coords.Y = Tile.Height * ((int)pos.X - (int)pos.Y) / 2;
+
+            return coords + Scroll;
         }
         #endregion
 

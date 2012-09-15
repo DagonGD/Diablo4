@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,8 +10,18 @@ namespace Core
 {
     public class Tile
     {
+        /// <summary>
+        /// 128
+        /// </summary>
         public static readonly float Width = 128;
+        /// <summary>
+        /// 64
+        /// </summary>
         public static readonly float Height = 64;
+        /// <summary>
+        /// (128,64)
+        /// </summary>
+        public static readonly Vector2 Sizes = new Vector2(Width, Height);
 
         public Texture2D Image;
 
