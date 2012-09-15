@@ -10,6 +10,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Core
 {
+    /// <summary>
+    /// Карта
+    /// </summary>
     [Serializable]
     public class Map
     {
@@ -37,7 +40,7 @@ namespace Core
 
         [XmlIgnore]
         [NonSerialized]
-        private Game _game;
+        public Game Game;
 
         [XmlIgnore]
         [NonSerialized]
@@ -88,6 +91,16 @@ namespace Core
                                     Speed = 50f,
                                     FacesNum = 4,
                                     Standing = game.Content.Load<Texture2D>("Images\\Units\\Warrior\\Standing")
+                                },
+                                new UnitType {
+                                    Name = "Дерево",
+                                    Code = "TREE",
+                                    MaxHealth = 1000,
+                                    Sizes = new Vector2(680f,601f),
+                                    Offset = new Vector2(340f,601f),
+                                    Speed = 0f,
+                                    FacesNum = 1,
+                                    Standing = game.Content.Load<Texture2D>("Images\\Units\\Tree\\Standing")
                                 }
                             };
 
@@ -97,7 +110,7 @@ namespace Core
             }
 
             SpriteBatch=new SpriteBatch(game.GraphicsDevice);
-            _game = game;
+            Game = game;
         }
         #endregion
 
@@ -115,7 +128,7 @@ namespace Core
                 {
                     coords = Map2Screen(Land2Map(new Vector2(i, j)));
                     if((coords.X+Tile.Width>0) && (coords.Y+Tile.Height>0) &&
-                        (coords.X < _game.GraphicsDevice.Viewport.Width) && (coords.Y < _game.GraphicsDevice.Viewport.Height))
+                        (coords.X < Game.GraphicsDevice.Viewport.Width) && (coords.Y < Game.GraphicsDevice.Viewport.Height))
                         SpriteBatch.Draw(Tiles[Land[i][j]].Image, coords, Color.White);
                 }
             }

@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework;
 
 namespace Core
 {
+    /// <summary>
+    /// Юнит
+    /// </summary>
     [Serializable]
     public class Unit
     {
@@ -76,7 +79,10 @@ namespace Core
             if(srcOffset<0 || srcOffset>=Type.FacesNum)
                 throw new IndexOutOfRangeException();
             Rectangle source = new Rectangle((int)Type.Sizes.X * srcOffset, 0, (int)Type.Sizes.X, (int)Type.Sizes.Y);
-            Map.SpriteBatch.Draw(Type.Standing, Position + Map.Scroll- Type.Offset, source, Color.White);
+            Vector2 drawPos = Position + Map.Scroll - Type.Offset;
+            if (drawPos.X + Type.Sizes.X > 0 && drawPos.X < Map.Game.GraphicsDevice.Viewport.Width &&
+                drawPos.Y + Type.Sizes.Y > 0 && drawPos.Y < Map.Game.GraphicsDevice.Viewport.Height)
+                Map.SpriteBatch.Draw(Type.Standing, drawPos, source, Color.White);
         }
 
         /// <summary>

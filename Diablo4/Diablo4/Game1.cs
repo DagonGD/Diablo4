@@ -19,7 +19,7 @@ namespace Diablo4
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        //SpriteBatch spriteBatch;
         
         public Game1()
         {
@@ -39,8 +39,11 @@ namespace Diablo4
         /// </summary>
         protected override void Initialize()
         {
-            Components.Add(new FPSCounter(this));
-            Components.Add(new GameMap(this));
+            FPSCounter fpsCounter = new FPSCounter(this);
+            Components.Add(fpsCounter);
+            GameMap gameMap=new GameMap(this);
+            Components.Add(gameMap);
+            Components.Add(new Interface(this,fpsCounter));
 
             base.Initialize();
         }
@@ -52,7 +55,7 @@ namespace Diablo4
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            //spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             
@@ -80,6 +83,23 @@ namespace Diablo4
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+            if(keyboardState.IsKeyDown(Keys.F))
+            {
+                if (graphics.IsFullScreen)
+                {
+                    graphics.PreferredBackBufferWidth = 800;
+                    graphics.PreferredBackBufferHeight = 600;
+                    graphics.IsFullScreen = false;
+                    graphics.ApplyChanges();
+                }
+                else
+                {
+                    graphics.PreferredBackBufferWidth = graphics.GraphicsDevice.DisplayMode.Width;
+                    graphics.PreferredBackBufferHeight = graphics.GraphicsDevice.DisplayMode.Height;
+                    graphics.IsFullScreen = true;
+                    graphics.ApplyChanges();
+                }
+            }
 
             base.Update(gameTime);
         }

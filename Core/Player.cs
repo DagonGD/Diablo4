@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Core
 {
+    /// <summary>
+    /// Игрок
+    /// </summary>
     public class Player:Unit
     {
     }

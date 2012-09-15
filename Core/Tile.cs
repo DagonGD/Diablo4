@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Core
 {
+    /// <summary>
+    /// Тайл земли
+    /// </summary>
     public class Tile
     {
         /// <summary>

@@ -10,7 +10,7 @@ namespace Diablo4.Components
 {
     class GameMap : DrawableGameComponent
     {
-        private Map _map;
+        public Map Map;
         private readonly Game _game;
 
         public GameMap(Game game) : base(game)
@@ -19,8 +19,8 @@ namespace Diablo4.Components
         }
         protected override void LoadContent()
         {
-            _map = Map.Load("Worlds/World1/Map1.map");
-            _map.Init(_game);
+            Map = Map.Load("Worlds/World1/Map1.map");
+            Map.Init(_game);
         }
 
         public override void Update(GameTime gameTime)
@@ -29,25 +29,25 @@ namespace Diablo4.Components
             MouseState mouseState = Mouse.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Up))
-                _map.Scroll.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
+                Map.Scroll.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
             if (keyboardState.IsKeyDown(Keys.Down))
-                _map.Scroll.Y -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
+                Map.Scroll.Y -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
             if (keyboardState.IsKeyDown(Keys.Left))
-                _map.Scroll.X += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
+                Map.Scroll.X += (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
             if (keyboardState.IsKeyDown(Keys.Right))
-                _map.Scroll.X -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
+                Map.Scroll.X -= (float)gameTime.ElapsedGameTime.TotalSeconds * 500;
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 //int i = _map.GetLandAtPos(_map.Screen2Map(new Vector2(mouseState.X, mouseState.Y)));
-                _map.Units[0].Target=_map.Screen2Map(new Vector2(mouseState.X, mouseState.Y));
+                Map.Units[0].Target=Map.Screen2Map(new Vector2(mouseState.X, mouseState.Y));
             }
 
-            _map.Update(gameTime);
+            Map.Update(gameTime);
         }
         public override void Draw(GameTime gameTime)
         {
-            _map.Draw();
+            Map.Draw();
         }
     }
 }
