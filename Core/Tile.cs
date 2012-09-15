@@ -25,14 +25,17 @@ namespace Core
 
         public Texture2D Image;
 
+        public bool IsPassable;
+
         public Tile()
         {
             
         }
 
-        public Tile(ContentManager content, string filename)
+        public Tile(ContentManager content, string filename, bool isPassable)
         {
             Load(content, filename);
+            IsPassable = isPassable;
         }
 
         public void Load(ContentManager content, string filename)

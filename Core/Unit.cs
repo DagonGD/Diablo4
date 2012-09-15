@@ -11,6 +11,9 @@ namespace Core
     public class Unit
     {
         private UnitType _type;
+        /// <summary>
+        /// Тип юнита
+        /// </summary>
         [XmlIgnore]
         public UnitType Type
         {
@@ -23,33 +26,106 @@ namespace Core
                 return _type;
             }
         }
+        /// <summary>
+        /// Код типа юнита
+        /// </summary>
         public string TypeCode;
 
+        /// <summary>
+        /// Карта на которой размещен юнит
+        /// </summary>
         [XmlIgnore]
         [NonSerialized]
         public Map Map;
 
+        /// <summary>
+        /// Количество здоровья
+        /// </summary>
         public int Health;
+        /// <summary>
+        /// Расположение на карте
+        /// </summary>
         public Vector2 Position;
-        public int Angle;
 
-        private double _lastRotationTime;
-
-        public void Draw()
+        /// <summary>
+        /// Угол в радианах, на который повернут юнит относительно оси Y против часовой стрелки
+        /// </summary>
+        private double _angle ;
+        public double Angle
         {
-            Rectangle source = new Rectangle(Type.Width*Angle, 0, Type.Width, Type.Height);
-            Map.SpriteBatch.Draw(Type.Standing, Position + Map.Scroll, source, Color.White);
+            set { _angle = Utils.NormalizeAngle(value); }
+            get { return _angle; }
+        }
+        /// <summary>
+        /// Угол в градусах, на который повернут юнит относительно оси Y против часовой стрелки
+        /// </summary>
+        [XmlIgnore]
+        public double AngleDeg
+        {
+            get { return Angle*180d/Math.PI; }
         }
 
+        public Vector2 Target;
+
+        /// <summary>
+        /// Нарисовать юнит
+        /// </summary>
+        public void Draw()
+        {
+            int srcOffset = (int)(Utils.NormalizeAngle(Angle + Math.PI / Type.FacesNum) / (2 * Math.PI / Type.FacesNum));
+            if(srcOffset<0 || srcOffset>=Type.FacesNum)
+                throw new IndexOutOfRangeException();
+            Rectangle source = new Rectangle((int)Type.Sizes.X * srcOffset, 0, (int)Type.Sizes.X, (int)Type.Sizes.Y);
+            Map.SpriteBatch.Draw(Type.Standing, Position + Map.Scroll- Type.Offset, source, Color.White);
+        }
+
+        /// <summary>
+        /// Логика работы
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-            if(gameTime.TotalGameTime.TotalMilliseconds-_lastRotationTime>3000)
-            {
-                _lastRotationTime = gameTime.TotalGameTime.TotalMilliseconds;
-                if (++Angle > 3)
-                    Angle = 0;
+           UpdatePosition(gameTime);
+        }
 
+        private void UpdatePosition(GameTime gameTime)
+        {
+            Vector2 delta = Target - Position;
+            if(delta==Vector2.Zero)
+                return;
+            
+            if (delta.Length() < Type.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds)
+            {
+                //Пришли
+                if (Map.IsPassable(Target))
+                    Position = Target;
+                else
+                    Target = Position;
             }
+            else
+            {
+                //Разворачиваемся к цели
+                RotateTo(Target);
+                //Новая позиция
+                Vector2 newPosition = Position + Vector2.Normalize(delta) * Type.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Если можно пройти
+                if (Map.IsPassable(newPosition))
+                    //Идем
+                    Position = newPosition;
+                else
+                    //Иначе стоим
+                    Target = Position;
+            }
+        }
+
+        /// <summary>
+        /// Разворот юнита в сторону указанной точки
+        /// </summary>
+        /// <param name="point">Координаты точки в относительно карты игры</param>
+        public void RotateTo(Vector2 point)
+        {
+            Vector2 delta = point - Position;
+            Angle = Utils.GetAngle(delta);
         }
     }
 }

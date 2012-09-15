@@ -72,14 +72,23 @@ namespace Core
         {
             Tiles=new List<Tile>
                       {
-                          new Tile(game.Content, "Images\\Tiles\\Land"),
-                          new Tile(game.Content, "Images\\Tiles\\Water"),
-                          new Tile(game.Content, "Images\\Tiles\\Brick")
+                          new Tile(game.Content, "Images\\Tiles\\Land", true),
+                          new Tile(game.Content, "Images\\Tiles\\Water",false),
+                          new Tile(game.Content, "Images\\Tiles\\Brick",true)
                       };
 
             UnitTypes = new List<UnitType>
                             {
-                                new UnitType {Name = "Воин", Code = "WARRIOR", MaxHealth = 100, Width = 50, Height = 100, Standing = game.Content.Load<Texture2D>("Images\\Units\\Warrior\\Standing")}
+                                new UnitType {
+                                    Name = "Воин",
+                                    Code = "WARRIOR",
+                                    MaxHealth = 100,
+                                    Sizes = new Vector2(50f,100f),
+                                    Offset = new Vector2(25f,100f),
+                                    Speed = 50f,
+                                    FacesNum = 4,
+                                    Standing = game.Content.Load<Texture2D>("Images\\Units\\Warrior\\Standing")
+                                }
                             };
 
             foreach (Unit unit in Units)
@@ -104,7 +113,7 @@ namespace Core
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    coords = Map2Screen(new Vector2(i, j));
+                    coords = Map2Screen(Land2Map(new Vector2(i, j)));
                     if((coords.X+Tile.Width>0) && (coords.Y+Tile.Height>0) &&
                         (coords.X < _game.GraphicsDevice.Viewport.Width) && (coords.Y < _game.GraphicsDevice.Viewport.Height))
                         SpriteBatch.Draw(Tiles[Land[i][j]].Image, coords, Color.White);
@@ -127,13 +136,13 @@ namespace Core
         }
 
         /// <summary>
-        /// Получение типа земли по экранным координатам
+        /// Получение типа земли по координатам карты
         /// </summary>
         /// <param name="pos"></param>
         /// <returns></returns>
         public int GetLandAtPos(Vector2 pos)
         {
-            Vector2 screen = Screen2Map(pos);
+            Vector2 screen = Map2Land(pos);
             int i = (int)screen.X;
             int j = (int)screen.Y;
 
@@ -146,16 +155,62 @@ namespace Core
         }
 
         /// <summary>
+        /// Получение тайла по координатам карты
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public Tile GetTileAtPos(Vector2 pos)
+        {
+            int i = GetLandAtPos(pos);
+            return i == -1 ? null : Tiles[i];
+        }
+
+        /// <summary>
+        /// Проходима ли карта в указанных координатах
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public bool IsPassable(Vector2 pos)
+        {
+            Tile tile = GetTileAtPos(pos);
+            return (tile != null && tile.IsPassable);
+        }
+
+
+        #endregion
+
+        #region Преобразования координат
+        /// <summary>
         /// Преобразование экранных координат в координаты карты
         /// </summary>
         /// <param name="pos"></param>
         /// <returns></returns>
-        /// <remarks>Накручено, зато работает правильно))</remarks>
         public Vector2 Screen2Map(Vector2 pos)
+        {
+            return pos - Scroll;
+        }
+
+        /// <summary>
+        /// Преобразование координат карты в экранные
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public Vector2 Map2Screen(Vector2 pos)
+        {
+            return pos + Scroll;
+        }
+
+        /// <summary>
+        /// Преобразование координат карты в индексы земли
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        /// <remarks>Накручено, зато работает правильно))</remarks>
+        public Vector2 Map2Land(Vector2 pos)
         {
             //http://www.gamedev.ru/code/forum/?id=122565#m7
             //http://www.math.by/geometry/eqline.html
-            pos -= Scroll;
+            //pos -= Scroll;
 
             //Определение координат красного робма
             int x = (int)Math.Floor(pos.X / Tile.Width);
@@ -184,21 +239,21 @@ namespace Core
 
             if (-Tile.Height * a / 2 + Tile.Width * b / 2 - Tile.Height * Tile.Width / 4 > 0)
                 j--;
-            return new Vector2(i,j);
+            return new Vector2(i, j);
         }
 
         /// <summary>
-        /// Преобразование координат карты в экранные
+        /// Преобразование индексов земли в координаты карты
         /// </summary>
         /// <param name="pos"></param>
         /// <returns></returns>
-        public Vector2 Map2Screen(Vector2 pos)
+        public Vector2 Land2Map(Vector2 pos)
         {
             Vector2 coords;
             coords.X = Tile.Width * ((int)pos.X + (int)pos.Y) / 2;
             coords.Y = Tile.Height * ((int)pos.X - (int)pos.Y) / 2;
 
-            return coords + Scroll;
+            return coords;// +Scroll;
         }
         #endregion
 

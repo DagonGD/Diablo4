@@ -39,7 +39,8 @@ namespace Diablo4.Components
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                int i = _map.GetLandAtPos(new Vector2(mouseState.X, mouseState.Y));
+                //int i = _map.GetLandAtPos(_map.Screen2Map(new Vector2(mouseState.X, mouseState.Y)));
+                _map.Units[0].Target=_map.Screen2Map(new Vector2(mouseState.X, mouseState.Y));
             }
 
             _map.Update(gameTime);

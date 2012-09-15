@@ -98,6 +98,7 @@
     <Compile Include="Tile.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="UnitType.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
