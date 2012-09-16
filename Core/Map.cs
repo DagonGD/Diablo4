@@ -45,6 +45,10 @@ namespace Core
         [XmlIgnore]
         [NonSerialized]
         public Vector2 Scroll;
+
+        [XmlIgnore]
+        [NonSerialized]
+        public Unit Player;
         #endregion
 
         #region Инициализация
@@ -109,6 +113,8 @@ namespace Core
                 unit.Map = this;
             }
 
+            Player = Units[0];
+
             SpriteBatch=new SpriteBatch(game.GraphicsDevice);
             Game = game;
         }
@@ -135,6 +141,7 @@ namespace Core
             #endregion
 
             #region Отрисовка юнитов
+            Units.Sort((u1,u2)=>u1.Position.Y.CompareTo(u2.Position.Y));
             Units.ForEach(s => s.Draw());
             #endregion
 

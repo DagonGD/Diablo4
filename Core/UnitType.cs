@@ -47,5 +47,10 @@ namespace Core
         /// </summary>
         public Vector2 Offset;
         #endregion
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

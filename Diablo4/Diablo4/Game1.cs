@@ -83,6 +83,7 @@ namespace Diablo4
 
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+
             if(keyboardState.IsKeyDown(Keys.F))
             {
                 if (graphics.IsFullScreen)

@@ -78,8 +78,10 @@ namespace Core
             int srcOffset = (int)(Utils.NormalizeAngle(Angle + Math.PI / Type.FacesNum) / (2 * Math.PI / Type.FacesNum));
             if(srcOffset<0 || srcOffset>=Type.FacesNum)
                 throw new IndexOutOfRangeException();
+
             Rectangle source = new Rectangle((int)Type.Sizes.X * srcOffset, 0, (int)Type.Sizes.X, (int)Type.Sizes.Y);
             Vector2 drawPos = Position + Map.Scroll - Type.Offset;
+
             if (drawPos.X + Type.Sizes.X > 0 && drawPos.X < Map.Game.GraphicsDevice.Viewport.Width &&
                 drawPos.Y + Type.Sizes.Y > 0 && drawPos.Y < Map.Game.GraphicsDevice.Viewport.Height)
                 Map.SpriteBatch.Draw(Type.Standing, drawPos, source, Color.White);
@@ -97,7 +99,8 @@ namespace Core
         private void UpdatePosition(GameTime gameTime)
         {
             Vector2 delta = Target - Position;
-            if(delta==Vector2.Zero)
+            //Если идти некуда или скорость нулевая
+            if(delta==Vector2.Zero || Math.Abs(Type.Speed)<float.Epsilon)
                 return;
             
             if (delta.Length() < Type.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds)
@@ -132,6 +135,11 @@ namespace Core
         {
             Vector2 delta = point - Position;
             Angle = Utils.GetAngle(delta);
+        }
+
+        public override string ToString()
+        {
+            return Type.Name;
         }
     }
 }
